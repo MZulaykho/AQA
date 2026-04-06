@@ -92,5 +92,50 @@ def task_05():
         browser.close()
 
 
+def task_06():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False, slow_mo=1000)
+        page = browser.new_page()
+        page.goto(URL)
+
+        navigate_to_example(page, "Dropdown")
+        dropdownloc = page.locator("#dropdown")
+        assert "Please select an option" in page.locator("#dropdown>option:first-child").inner_text()
+
+
+        dropdownloc.select_option(label="Option 1")
+        assert "Option 1" in page.locator("#dropdown>option:nth-child(2)").inner_text()
+
+        dropdownloc.select_option(label="Option 2")
+        assert "Option 2" in page.locator("#dropdown>option:nth-child(3)").inner_text()
+
+        print("Выбрано: Option 2")
+
+        browser.close()
+
+def task_07():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False, slow_mo=1000)
+        page = browser.new_page()
+        page.goto(URL)
+
+        navigate_to_example(page, "Inputs")
+        inputsloc = page.locator('[type="number"]')
+        inputsloc.fill("123")
+
+        assert "123" in inputsloc.input_value()
+
+        inputsloc.clear()
+
+        inputsloc.fill("456")
+
+        assert "456" in inputsloc.input_value()
+
+        print("✅ Введено: 456")
+
+
+
+
+
 if __name__ == "__main__":
-    task_05()
+    task_07()
